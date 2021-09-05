@@ -5,7 +5,7 @@ pipeline {
         checkout scm
     }
     stage ('Build Docker image') {
-        app = docker.build("dezsokee/ping-pong_game")
+        app = docker.build("Szaby200342/ping-pong_game")
     }
     stage ('Test image') {
         app inside {
