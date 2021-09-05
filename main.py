@@ -1,5 +1,4 @@
 #token kod: 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
-asdasdasdas
 
 import pygame
 
