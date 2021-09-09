@@ -1,31 +1,24 @@
-pipeline {
-    agent any
+node {
+    def app
 
-    stages {
-        stage ('Hello') {
-            steps {
-                echo 'Hello World!'
-            }
+    stage ('Clone repository') {
+        checkout scm
+    }
+
+    stage ('Bulid image') {
+        app = docker.build ("szdezsoke2003/ping-pong_game")
+    }
+
+    stage ('Test imgage') {
+        app.inside {
+            sh 'echo "Test passed"'
         }
-        stage ('Build') {
-            steps {
-                echo 'Building'
-            }
-        }
-        stage ('Deploy') {
-            steps {
-                echo 'Deploying'
-            }
-        }
-        stage ('Test') {
-            steps {
-                echo 'Testing'
-            }
-        }
-        stage ('Release') {
-            steps {
-                echo 'Releasing'
-            }
+    }
+
+    stage ('Push image') {
+        docker.withRegistry('https://registry.hub.docker.com', 'c265b68c-616f-4975-b293-1a58321a6ea6') {
+            app.push ("${env.BUILD_NUMBER}")
+            app.push("latest")
         }
     }
 }
